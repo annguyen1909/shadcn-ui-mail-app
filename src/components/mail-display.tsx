@@ -2,6 +2,10 @@ import addDays from "date-fns/addDays"
 import addHours from "date-fns/addHours"
 import format from "date-fns/format"
 import nextSaturday from "date-fns/nextSaturday"
+import { type ChartConfig } from "@/components/ui/chart"
+import { ChartContainer } from "@/components/ui/chart"
+import { Bar, BarChart, CartesianGrid } from "recharts"
+import { Component, Component2 } from "./ui/circle-chart"
 import {
   Archive,
   ArchiveX,
@@ -11,8 +15,9 @@ import {
   Reply,
   ReplyAll,
   Trash2,
+  Search,
 } from "lucide-react"
-
+import { Input } from "@/components/ui/input"
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -47,6 +52,26 @@ import { Mail } from "../app/data"
 interface MailDisplayProps {
   mail: Mail | null
 }
+
+const chartData = [
+  { month: "January", desktop: 186, mobile: 80 },
+  { month: "February", desktop: 305, mobile: 200 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
+]
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig
 
 export function MailDisplay({ mail }: MailDisplayProps) {
   const today = new Date()
@@ -87,58 +112,14 @@ export function MailDisplay({ mail }: MailDisplayProps) {
             <Popover>
               <PopoverTrigger asChild>
                 <TooltipTrigger asChild>
-                  <Button variant="ghost" size="icon" disabled={!mail}>
-                    <Clock className="h-4 w-4" />
-                    <span className="sr-only">Snooze</span>
-                  </Button>
+                <form>
+                <div className="relative">
+                  <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search" className="pl-8" />
+                </div>
+              </form>
                 </TooltipTrigger>
               </PopoverTrigger>
-              <PopoverContent className="flex w-[535px] p-0">
-                <div className="flex flex-col gap-2 border-r px-2 py-4">
-                  <div className="px-4 text-sm font-medium">Snooze until</div>
-                  <div className="grid min-w-[250px] gap-1">
-                    <Button
-                      variant="ghost"
-                      className="justify-start font-normal"
-                    >
-                      Later today{" "}
-                      <span className="ml-auto text-muted-foreground">
-                        {format(addHours(today, 4), "E, h:m b")}
-                      </span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="justify-start font-normal"
-                    >
-                      Tomorrow
-                      <span className="ml-auto text-muted-foreground">
-                        {format(addDays(today, 1), "E, h:m b")}
-                      </span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="justify-start font-normal"
-                    >
-                      This weekend
-                      <span className="ml-auto text-muted-foreground">
-                        {format(nextSaturday(today), "E, h:m b")}
-                      </span>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="justify-start font-normal"
-                    >
-                      Next week
-                      <span className="ml-auto text-muted-foreground">
-                        {format(addDays(today, 7), "E, h:m b")}
-                      </span>
-                    </Button>
-                  </div>
-                </div>
-                <div className="p-2">
-                  <Calendar />
-                </div>
-              </PopoverContent>
             </Popover>
             <TooltipContent>Snooze</TooltipContent>
           </Tooltip>
@@ -219,6 +200,24 @@ export function MailDisplay({ mail }: MailDisplayProps) {
           <Separator />
           <div className="flex-1 whitespace-pre-wrap p-4 text-sm">
             {mail.text}
+          </div>
+          <Separator className="mt-auto" />
+          <div className="flex">
+          {/* <ChartContainer config={chartConfig} className="flex min-h-[200px] w-[50%]">
+            <BarChart accessibilityLayer data={chartData}>
+              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+              <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            </BarChart>
+          </ChartContainer> */}
+          <Component/>
+          <Separator orientation="vertical" />
+          <Component2/>
+          {/* <ChartContainer config={chartConfig} className="flex min-h-[200px] w-[50%]">
+            <BarChart accessibilityLayer data={chartData}>
+              <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+              <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
+            </BarChart>
+          </ChartContainer> */}
           </div>
           <Separator className="mt-auto" />
           <div className="p-4">

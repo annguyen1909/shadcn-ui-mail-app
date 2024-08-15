@@ -60,7 +60,6 @@ export default function MailPage() {
           mails={mails}
           defaultLayout={defaultLayout}
           defaultCollapsed={defaultCollapsed}
-          navCollapsedSize={4}
         />
       </div>
     </>
